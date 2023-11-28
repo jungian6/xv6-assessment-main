@@ -4,10 +4,6 @@
 int main(int argc, char *argv[]) {
     setvideomode(0x13);
 
-    // Test setpixel
-    setpixel(100, 100, 15);
-    setpixel(101, 100, 15);
-    setpixel(102, 100, 15);
 
     // Test moveto and lineto
     moveto(0, 50, 50);     // Move to position (50, 50)
