@@ -91,18 +91,6 @@ int sys_greeting(void){
     return 0;
 }
 
-extern int setpixel(int hdc, int x, int y); // Ensure setpixel is defined in graphics.c
-
-int sys_setpixel(void) {
-    int hdc, x, y;
-
-    // Extract arguments from the user space
-    if (argint(0, &hdc) < 0 || argint(1, &x) < 0 || argint(2, &y) < 0)
-        return -1; // Return -1 in case of error
-
-    return setpixel(hdc, x, y); // Call the setpixel function
-}
-
 
 // return how many clock tick interrupts have occurred
 // since start.
