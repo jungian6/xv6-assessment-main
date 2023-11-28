@@ -42,4 +42,6 @@ int atoi(const char*);
 int greeting(void);
 int shutdown(int restart);
 int setpixel(int hdc, int x, int y);
+int moveto(int hdc, int x, int y);
+int lineto(int hdc, int x, int y);
 

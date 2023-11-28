@@ -39,7 +39,9 @@ my @syscalls = (
 				"greeting",
 				"shutdown",
 				"setvideomode",
-				"setpixel"
+				"setpixel",
+				"moveto",
+				"lineto"
 			   );
 
 my $i;			   
