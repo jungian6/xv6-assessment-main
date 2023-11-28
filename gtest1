@@ -1,0 +1,15 @@
+#include "graphics.c"
+#include "defs.h"
+
+
+int main() {
+    clear320x200x256();
+
+    setpixel(100, 100, 15);
+    setpixel(101, 100, 15);
+    setpixel(102, 100, 15);
+
+    return 0;
+    
+}
+
