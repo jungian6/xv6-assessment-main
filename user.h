@@ -1,5 +1,6 @@
 struct stat;
 struct rtcdate;
+struct rect;
 
 // system calls
 int fork(void);
@@ -44,4 +45,8 @@ int shutdown(int restart);
 int setpixel(int hdc, int x, int y);
 int moveto(int hdc, int x, int y);
 int lineto(int hdc, int x, int y);
-
+int selectpen(int hdc, int index);
+int setpencolour(int hdc, int r, int g, int b);
+int fillrect(int hdc, struct rect *r);
+int endpaint(int hdc);
+int beginpaint(int);
