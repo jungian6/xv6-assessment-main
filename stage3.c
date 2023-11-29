@@ -1,6 +1,6 @@
 #include "types.h"
 #include "user.h"
-#include "rect.h" // Include this if struct rect is in a separate header
+#include "rect.h"
 
 int main(int argc, char* argv[]) {
     setvideomode(0x13);
@@ -35,6 +35,4 @@ int main(int argc, char* argv[]) {
 
     setvideomode(0x03);
     exit();
-
-    
 }

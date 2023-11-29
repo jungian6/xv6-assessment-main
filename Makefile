@@ -199,7 +199,9 @@ UPROGS=\
 	_zombie\
 	_shutdown\
 	_hello\
-	_gtest\
+	_stage1\
+	_stage2\
+	_stage3\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
