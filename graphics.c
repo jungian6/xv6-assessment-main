@@ -240,7 +240,6 @@ int sys_fillrect(void) {
     }
 
     
-
     // Fill the rectangle
     for (int y = r->top; y <= r->bottom; y++) {
         for (int x = r->left; x <= r->right; x++) {

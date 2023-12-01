@@ -202,6 +202,7 @@ UPROGS=\
 	_stage1\
 	_stage2\
 	_stage3\
+	_stage4\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)

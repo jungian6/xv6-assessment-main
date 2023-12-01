@@ -4,35 +4,43 @@
 
 int main(int argc, char* argv[]) {
     setvideomode(0x13);
+    int pid = fork();
 
-    int hdc = beginpaint(0);
-    setpencolour(16, 0, 63, 0);
-    for (int i = 20; i <= 160; i+=20)
-    {
+    if (pid == 0) {
+        // Child process
+        int hdc = beginpaint(0);
+        setpencolour(16, 0, 255, 0);
         selectpen(hdc, 16);
-        moveto(hdc, i, i);
-        lineto(hdc, i, i+20);
-        lineto(hdc, i+20, i+20);
-        lineto(hdc, i+20, i);
-        lineto(hdc, i, i);
-        
-    }
 
-    hdc = beginpaint(0);
-    setpencolour(17, 63, 0, 0);
-    for (int i = 20; i <= 160; i+=20)
-    {
+        struct rect r;
+        r.top = 10;
+        r.left = 10;
+        r.bottom = 50;
+        r.right = 50;
+
+        fillrect(hdc, &r);
+        endpaint(hdc);
+        getch();
+
+        setvideomode(0x03);
+        exit();
+    } else if (pid > 0) {
+        // Parent process
+        int hdc = beginpaint(0);
+        setpencolour(17, 255, 0, 0);
         selectpen(hdc, 17);
-        moveto(hdc, i, i);
-        lineto(hdc, i, i+20);
-        lineto(hdc, i+20, i+20);
-        lineto(hdc, i+20, i);
-        lineto(hdc, i, i);
-        
-    }
-    endpaint(hdc);
-    getch();
 
-    setvideomode(0x03);
-    exit();
+        // draw a line
+        moveto(hdc, 100, 50);
+        lineto(hdc, 200, 150);
+        endpaint(hdc);
+
+        getch();
+        setvideomode(0x03);
+
+        wait(); // Wait for child process to finish
+        exit();
+    }
+
+    return 0;
 }
