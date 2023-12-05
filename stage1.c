@@ -2,32 +2,24 @@
 #include "user.h"
 #include "rect.h"
 
+#include "types.h"
+#include "user.h"
+
 int main(int argc, char* argv[])
 {
-    int hdc = beginpaint(0);
-    int pid = fork();
     setvideomode(0x13);
 
-    if (pid == 0)
-    {
-        setpencolour(16, 99, 3, 48);
-        selectpen(hdc, 16);
-        moveto(hdc, 100, 50);
-        lineto(hdc, 200, 150);
-        lineto(hdc, 300, 50);
-        lineto(hdc, 400, 150);
-        lineto(hdc, 500, 50);
-        exit();
-    } else if (pid > 0)
-    {
-        setpencolour(16, 99, 3, 48);
-        selectpen(hdc, 16);
-        moveto(hdc, 100, 50);
-        lineto(hdc, 200, 150);
-        
-    }
-    
+    int hdc = beginpaint(0);
+    setpixel(hdc, 100, 100);
+    setpixel(hdc, 101, 100);
+    setpixel(hdc, 102, 100);
+    setpixel(hdc, 103, 100);
+    setpixel(hdc, 104, 100);
+    setpixel(hdc, 105, 100);
+
+    setpixel(hdc, 100, 101);
     getch();
     setvideomode(0x03);
     exit();
 }
+

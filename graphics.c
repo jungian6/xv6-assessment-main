@@ -44,15 +44,12 @@ int sys_setpixel(void) {
     argint(1, &x);
     argint(2, &y);
 
-    if (hdc <= 0 || hdc > MAX_DC) return -1;
-    struct device_context *ctx = &dc_pool[hdc - 1];
-
     if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT)
         return -1;
 
     unsigned char *video_memory = phys_to_virt(VIDEO_MEMORY);
     unsigned int offset = y * SCREEN_WIDTH + x;
-    video_memory[offset] = ctx->current_pen;
+    video_memory[offset] = 15;
 
     return 0;
 }
@@ -155,8 +152,11 @@ int sys_endpaint(void) {
     argint(0, &hdc); // Extract the hdc argument
 
     if (hdc >= 0 && hdc < MAX_DC && dc_in_use[hdc]) {
-        dc_in_use[hdc] = false;
-        // Reset or clean up the device context state if necessary
+        // release the handle to the device context
+        dc_pool[hdc].current_x = 0;
+        dc_pool[hdc].current_y = 0;
+        dc_pool[hdc].current_pen = WHITE;
+        dc_in_use[hdc] = false;        
         return 0; // Success
     }
     return -1; // Invalid device context handle
@@ -176,14 +176,19 @@ int sys_setpencolour(void)
     // Validate the index and clip RGB values
     if (index < 16 || index > 255)
         return -1;
+    // Clip RGB values
     if (r < 0)
-    {
         r = 0;
-    }
     if (r > 63)
-    {
         r = 63;
-    }
+    if (g < 0)
+        g = 0;
+    if (g > 63)
+        g = 63;
+    if (b < 0)
+        b = 0;
+    if (b > 63)
+        b = 63;
 
     // Set the color in the palette
     outb(0x3C8, index);

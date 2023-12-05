@@ -7,46 +7,40 @@ int main(int argc, char* argv[])
 
     int pid = fork();
 
-    if (pid == -1) {
-        // Handle error: fork failed
-        exit();
-    }
-
-    int hdc;
-    int hdc2;
-    
-    if (pid > 0) {
-        // Child
-        hdc = beginpaint(0);
-        setpencolour(16, 0, 0, 63); // Blue
-        for (int i = 20; i <= 160; i += 20) {
+    if(pid == 0)
+    {
+        int hdc = beginpaint(0);
+        setpencolour(16, 0, 0, 63);
+        for (int i = 20; i <= 160; i+=20)
+        {
             selectpen(hdc, 16);
-            moveto(hdc, i, i + 20);
+            moveto(hdc, i, i+20);
             lineto(hdc, i, i + 40);
             lineto(hdc, i + 20, i + 40);
-            lineto(hdc, i + 20, i + 20);
+            lineto(hdc, i+20, i + 20);
             lineto(hdc, i, i + 20);
         }
         endpaint(hdc);
-        wait(); // Wait for parent process
-        getch();
-        setvideomode(0x03);
         exit();
-    } else if (pid == 0){
-        // Parent
-        hdc2 = beginpaint(0);
-        setpencolour(17, 0, 63, 0); // Green
-        for (int i = 20; i <= 160; i += 20) {
-            selectpen(hdc2, 17);
-            moveto(hdc2, i, i);
-            lineto(hdc2, i, i + 20);
-            lineto(hdc2, i + 20, i + 20);
-            lineto(hdc2, i + 20, i);
-            lineto(hdc2, i, i);
+    } else if (pid > 0)
+    {
+        int hdc = beginpaint(0);
+        setpencolour(17, 0, 63, 0);
+        for (int i = 20; i <= 160; i+=20)
+        {
+            selectpen(hdc, 17);
+            moveto(hdc, i, i);
+            lineto(hdc, i, i + 20);
+            lineto(hdc, i + 20, i + 20);
+            lineto(hdc, i+20, i);
+            lineto(hdc, i, i);
         }
-        endpaint(hdc2);
-        exit();
+        endpaint(hdc);
+        wait();
+    } else {
+        printf(1, "Fork failed\n");
     }
-
-    return 0;
+    getch();
+    setvideomode(0x03);
+    exit();
 }
