@@ -3,7 +3,6 @@
 #include "memlayout.h"
 #include "stdbool.h"
 #include "deviceContext.h"
-#include "rect.h"
 
 #define VIDEO_MEMORY 0xA0000
 #define SCREEN_WIDTH 320

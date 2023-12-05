@@ -1,6 +1,6 @@
 #include "types.h"
 #include "user.h"
-#include "rect.h"
+#include "deviceContext.h"
 
 int main(int argc, char* argv[]) {
     setvideomode(0x13);
