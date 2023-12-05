@@ -199,6 +199,7 @@ UPROGS=\
 	_zombie\
 	_shutdown\
 	_hello\
+	_moveToTest\
 	_stage1\
 	_stage2\
 	_stage3\
