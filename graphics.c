@@ -3,6 +3,8 @@
 #include "memlayout.h"
 #include "stdbool.h"
 #include "deviceContext.h"
+#include "x86.h"
+
 
 #define VIDEO_MEMORY 0xA0000
 #define SCREEN_WIDTH 320
@@ -134,13 +136,7 @@ int sys_lineto(void)
     return 0; // Success
 }
 
-// Function to output a byte to a port
-static void outb(ushort port, uchar data)
-{
-    asm volatile("outb %0, %1" : : "a"(data), "d"(port));
-}
 
-// In your .c file
 int sys_beginpaint(void) {
     int hwnd;
     argint(0, &hwnd); // Extract the hwnd argument
@@ -209,6 +205,10 @@ int sys_selectpen(void)
 
     argint(0, &hdc); 
     argint(1, &index);
+
+    // Validate the index
+    if (index < 16 || index > 255)
+        return -1;
 
     dc_pool[hdc].current_pen = index;
 
