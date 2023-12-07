@@ -24,6 +24,19 @@ static int abs(int n)
     return (n < 0) ? -n : n;
 }
 
+void errorCheck(int *x, int *y)
+{
+    if (*x < 0)
+        *x = 0;
+    if (*x >= SCREEN_WIDTH)
+        *x = SCREEN_WIDTH - 1;
+    if (*y < 0)
+        *y = 0;
+    if (*y >= SCREEN_HEIGHT)
+        *y = SCREEN_HEIGHT - 1;
+}
+
+
 void clear320x200x256()
 {
 
@@ -63,14 +76,8 @@ int sys_moveto(void)
     argint(2, &y); // Changed index to 2 for y
 
     // Clip the coordinates to screen boundaries
-    if (x < 0)
-        x = 0;
-    if (x >= SCREEN_WIDTH)
-        x = SCREEN_WIDTH - 1;
-    if (y < 0)
-        y = 0;
-    if (y >= SCREEN_HEIGHT)
-        y = SCREEN_HEIGHT - 1;
+    errorCheck(&x, &y);
+
 
     // Update the current graphics position
     dc_pool[hdc].current_x = x;
@@ -87,6 +94,10 @@ int sys_lineto(void)
     argint(0, &hdc);
     argint(1, &x1); // Get x1 coordinate
     argint(2, &y1); // Get y1 coordinate
+
+    // Apply clipping to destination coordinates
+    errorCheck(&x1, &y1);
+
 
     int x0 = dc_pool[hdc].current_x, y0 = dc_pool[hdc].current_y; // Starting point is current position
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
@@ -176,18 +187,12 @@ int sys_setpencolour(void)
     if (index < 16 || index > 255)
         return -1;
     // Clip RGB values
-    if (r < 0)
-        r = 0;
-    if (r > 63)
-        r = 63;
-    if (g < 0)
-        g = 0;
-    if (g > 63)
-        g = 63;
-    if (b < 0)
-        b = 0;
-    if (b > 63)
-        b = 63;
+    if (r < 0) r = 0;
+    if (r > 63) r = 63;
+    if (g < 0) g = 0;
+    if (g > 63) g = 63;
+    if (b < 0) b = 0;
+    if (b > 63) b = 63;
 
     // Set the color in the palette
     outb(0x3C8, index);
@@ -205,14 +210,9 @@ int sys_selectpen(void)
     argint(0, &hdc); 
     argint(1, &index);
 
-    // Validate the index
-    if (index < 0 || index > 255)
-        return -1;
-
-    int old_pen = dc_pool[hdc].current_pen;
     dc_pool[hdc].current_pen = index;
 
-    return old_pen;
+    return 0;
 }
 
 int sys_fillrect(void) {
@@ -240,15 +240,6 @@ int sys_fillrect(void) {
     for (int y = r->top; y <= r->bottom; y++) {
         for (int x = r->left; x <= r->right; x++) {
             videomemory[y * SCREEN_WIDTH + x] = dc_pool[hdc].current_pen;
-        }
-    }
-
-    
-    // Fill the rectangle
-    for (int y = r->top; y <= r->bottom; y++) {
-        for (int x = r->left; x <= r->right; x++) {
-            unsigned char *video_memory = phys_to_virt(VIDEO_MEMORY);
-            video_memory[y * SCREEN_WIDTH + x] = dc_pool[hdc].current_pen;
         }
     }
 

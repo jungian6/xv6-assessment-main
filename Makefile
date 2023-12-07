@@ -200,9 +200,12 @@ UPROGS=\
 	_shutdown\
 	_hello\
 	_moveToTest\
-	_stage1\
-	_stage2\
-	_stage3\
+	_test_blankscreen\
+	_test_forked\
+	_test_setpixel\
+	_test_pen\
+	_test_square\
+	_test_fillrect\
 	_stage4\
 
 fs.img: mkfs $(UPROGS)

@@ -6,7 +6,7 @@ int main(int argc, char* argv[]) {
     setvideomode(0x13);
 
     int hdc = beginpaint(0);
-    setpencolour(16, 0, 255, 0);
+    setpencolour(16, 30, 50, 60);
     selectpen(hdc, 16);
 
     struct rect r;
