@@ -21,6 +21,7 @@ static uchar *phys_to_virt(uint pa)
     return (uchar *)(pa + KERNBASE);
 }
 
+
 static int abs(int n)
 {
     return (n < 0) ? -n : n;
@@ -41,13 +42,21 @@ void clear320x200x256()
 
 int sys_setpixel(void) {
     int hdc, x, y;
-    argint(0, &hdc);
-    argint(1, &x);
-    argint(2, &y);
 
+    if (argint(0, &hdc) < 0)
+        return -1; // Error in retrieving hdc
+
+    if (argint(1, &x) < 0)
+        return -1; // Error in retrieving x
+
+    if (argint(2, &y) < 0)
+        return -1; // Error in retrieving y
+
+    // Clip the coordinates to screen boundaries
     if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT)
         return -1;
 
+    // Set the pixel
     unsigned char *video_memory = phys_to_virt(VIDEO_MEMORY);
     unsigned int offset = y * SCREEN_WIDTH + x;
     video_memory[offset] = 15;
@@ -60,9 +69,15 @@ int sys_moveto(void)
 {
     int hdc, x, y;
 
-    argint(0, &hdc);
-    argint(1, &x); // Changed index to 1 for x
-    argint(2, &y); // Changed index to 2 for y
+    if (argint(0, &hdc) < 0)
+        return -1; // Error in retrieving hdc
+
+    if (argint(1, &x) < 0)
+        return -1; // Error in retrieving x
+
+    if (argint(2, &y) < 0)
+        return -1; // Error in retrieving y
+
 
     // Clip the coordinates to screen boundaries
     if (x < 0) x = 0;
@@ -83,9 +98,14 @@ int sys_lineto(void)
 {
     int hdc, x1, y1;
 
-    argint(0, &hdc);
-    argint(1, &x1); // Get x1 coordinate
-    argint(2, &y1); // Get y1 coordinate
+    if (argint(0, &hdc) < 0)
+        return -1; // Error in retrieving hdc
+
+    if (argint(1, &x1) < 0)
+        return -1; // Error in retrieving x
+
+    if (argint(2, &y1) < 0)
+        return -1; // Error in retrieving y
 
     // Apply clipping to destination coordinates
     // Clip the coordinates to screen boundaries
@@ -133,7 +153,11 @@ int sys_lineto(void)
 
 int sys_beginpaint(void) {
     int hwnd;
-    argint(0, &hwnd); // Extract the hwnd argument
+
+    if (argint(0, &hwnd) < 0)
+        return -1;
+
+         // Extract the hwnd argument
     for (int i = 0; i < MAX_DC; i++) {
         if (!dc_in_use[i]) {
             dc_in_use[i] = true;
@@ -149,7 +173,9 @@ int sys_beginpaint(void) {
 
 int sys_endpaint(void) {
     int hdc;
-    argint(0, &hdc); // Extract the hdc argument
+
+    if (argint(0, &hdc) < 0); // Extract the hdc argument
+        return -1; 
 
     if (hdc >= 0 && hdc < MAX_DC && dc_in_use[hdc]) {
         // release the handle to the device context
@@ -168,10 +194,17 @@ int sys_setpencolour(void)
     int index, r, g, b;
 
     // Extract arguments
-    argint(0, &index);
-    argint(1, &r);
-    argint(2, &g);
-    argint(3, &b);
+    if (argint(0, &index) < 0)
+        return -1;
+
+    if (argint(1, &r) < 0)
+        return -1;
+
+    if (argint(2, &g) < 0)
+        return -1;
+
+    if (argint(3, &b) < 0)
+        return -1;
 
     // Validate the index and clip RGB values
     if (index < 16 || index > 255)
@@ -197,8 +230,10 @@ int sys_selectpen(void)
 {
     int hdc, index;
 
-    argint(0, &hdc); 
-    argint(1, &index);
+    if (argint(0, &hdc) < 0)
+        return -1; 
+    if (argint(1, &index) < 0)
+        return -1;
 
     // Validate the index
     if (index < 16 || index > 255)
@@ -214,7 +249,9 @@ int sys_fillrect(void) {
     struct rect *r;
 
     // Extract arguments
-    argint(0, &hdc);
+    if (argint(0, &hdc) < 0)
+        return -1;
+        
     if (argptr(1, (void *)&r, sizeof(r)) < 0)
         return -1;
 
