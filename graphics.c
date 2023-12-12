@@ -174,7 +174,7 @@ int sys_beginpaint(void) {
 int sys_endpaint(void) {
     int hdc;
 
-    if (argint(0, &hdc) < 0); // Extract the hdc argument
+    if (argint(0, &hdc) < 0) // Extract the hdc argument
         return -1; 
 
     if (hdc >= 0 && hdc < MAX_DC && dc_in_use[hdc]) {
@@ -251,7 +251,7 @@ int sys_fillrect(void) {
     // Extract arguments
     if (argint(0, &hdc) < 0)
         return -1;
-        
+
     if (argptr(1, (void *)&r, sizeof(r)) < 0)
         return -1;
 
