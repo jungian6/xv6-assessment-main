@@ -26,19 +26,6 @@ static int abs(int n)
     return (n < 0) ? -n : n;
 }
 
-void errorCheck(int *x, int *y)
-{
-    if (*x < 0)
-        *x = 0;
-    if (*x >= SCREEN_WIDTH)
-        *x = SCREEN_WIDTH - 1;
-    if (*y < 0)
-        *y = 0;
-    if (*y >= SCREEN_HEIGHT)
-        *y = SCREEN_HEIGHT - 1;
-}
-
-
 void clear320x200x256()
 {
 
@@ -78,7 +65,10 @@ int sys_moveto(void)
     argint(2, &y); // Changed index to 2 for y
 
     // Clip the coordinates to screen boundaries
-    errorCheck(&x, &y);
+    if (x < 0) x = 0;
+    if (x >= SCREEN_WIDTH) x = SCREEN_WIDTH - 1;
+    if (y < 0) y = 0;
+    if (y >= SCREEN_HEIGHT) y = SCREEN_HEIGHT - 1;
 
 
     // Update the current graphics position
@@ -98,7 +88,11 @@ int sys_lineto(void)
     argint(2, &y1); // Get y1 coordinate
 
     // Apply clipping to destination coordinates
-    errorCheck(&x1, &y1);
+    // Clip the coordinates to screen boundaries
+    if (x1 < 0) x1 = 0;
+    if (x1 >= SCREEN_WIDTH) x1 = SCREEN_WIDTH - 1;
+    if (y1 < 0) y1 = 0;
+    if (y1 >= SCREEN_HEIGHT) y1 = SCREEN_HEIGHT - 1;
 
 
     int x0 = dc_pool[hdc].current_x, y0 = dc_pool[hdc].current_y; // Starting point is current position

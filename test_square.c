@@ -5,7 +5,7 @@ int main(int argc, char* argv[])
 {
     setvideomode(0x13);
     int hdc = beginpaint(0);
-    setpencolour(17, 10, 10, 10);
+    setpencolour(17, 63, 63, 63);
     for (int i = 20; i <= 160; i+=20)
     {
         selectpen(hdc, 17);

@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
     r.top = 10;
     r.left = 10;
-    r.bottom = 50;
+    r.bottom = -50;
     r.right = 50;
 
     fillrect(hdc, &r);
