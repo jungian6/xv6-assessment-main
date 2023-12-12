@@ -206,7 +206,6 @@ UPROGS=\
 	_test_pen\
 	_test_square\
 	_test_fillrect\
-	_stage4\
 
 fs.img: mkfs $(UPROGS)
 	./mkfs fs.img $(UPROGS)
